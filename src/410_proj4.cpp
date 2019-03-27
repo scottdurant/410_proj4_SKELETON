@@ -87,6 +87,12 @@ void audit_results() {
 int main()
 {
 	//TODO your code here
+	thread t1(doWaiter, 1, "in1.txt");
+	t1.join();
+
+	ORDER o = order_in_Q.front();
+	cout<<o.number_donuts<<endl;
+
 	return SUCCESS;
 }
 
