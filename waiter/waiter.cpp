@@ -59,8 +59,9 @@ void Waiter::beWaiter() {
 		{
 			lock_guard<mutex> lck(mutex_order_inQ);
 			order_in_Q.push(someOrder);
-			cv_order_inQ.notify_all();
 		}
+
+		cv_order_inQ.notify_all();
 		getNext(someOrder);
 	}
 
