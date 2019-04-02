@@ -2,6 +2,7 @@
 
 #include "../includes/baker.h"
 #include "../includes/externs.h"
+
 using namespace std;
 
 Baker::Baker(int id) :
@@ -39,7 +40,6 @@ void Baker::bake_and_box(ORDER &anOrder) {
 		}
 		anOrder.boxes.push_back(additionalBox);
 	}
-
 }
 
 //as long as there are orders in order_in_Q then
@@ -54,36 +54,31 @@ void Baker::bake_and_box(ORDER &anOrder) {
 //hint: wait for something to be in order_in_Q or b_WaiterIsFinished == true
 void Baker::beBaker() {
 	while (true) {
-		unique_lock<mutex> lck(mutex_order_inQ);
+		unique_lock<mutex> inLock(mutex_order_inQ);
 
 		while (order_in_Q.empty() && !b_WaiterIsFinished) {
-
-			cv_order_inQ.wait(lck);
+			cv_order_inQ.wait(inLock);
 		}
-
 		// if there's orders, bake and box them
 		if (!order_in_Q.empty()) {
 			ORDER o;
+			o = order_in_Q.front();
+			order_in_Q.pop();
 
-			{
-				//lock_guard<mutex> lck(mutex_order_inQ);
-				o = order_in_Q.front();
-				order_in_Q.pop();
-			}
+			// we aren't accessing order_inQ anymore
+			inLock.unlock();
 
-			lck.unlock();
 			bake_and_box(o);
 
-			lock_guard<mutex> lck(mutex_order_outQ);
+			lock_guard<mutex> outLock(mutex_order_outQ);
+			// push the order to the order_out_vector
 			order_out_Vector.push_back(o);
 		}
 
 		// if no more orders and waiter is done, baker is done
-		if(order_in_Q.empty() && b_WaiterIsFinished){
+		if (order_in_Q.empty() && b_WaiterIsFinished) {
 			break;
 		}
-
 	}
-
 }
 
