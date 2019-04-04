@@ -1,5 +1,9 @@
-#include <mutex>
+/**
+ * I (Scott Durant) worked with Todd Sandburg on this project.
+ * We both worked on it at the same time, so the work was split 50/50.
+ */
 
+#include <mutex>
 #include "../includes/baker.h"
 #include "../includes/externs.h"
 

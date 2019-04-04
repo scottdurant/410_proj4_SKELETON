@@ -1,10 +1,13 @@
+/**
+ * I (Scott Durant) worked with Todd Sandburg on this project.
+ * We both worked on it at the same time, so the work was split 50/50.
+ */
+
 #include <string>
 #include "stdlib.h"
-
 #include "../includes/waiter.h"
 #include "../includes/file_IO.h"
 #include "../includes/externs.h"
-
 
 using namespace std;
 
